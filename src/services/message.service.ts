@@ -1,7 +1,7 @@
 let clientOn = false;
 let marsOn = false;
 let earthOn = false;
-let sateliteOn = false;
+let satelliteOn = false;
 
 const marsToken = "M" + Math.random().toString(36).substr(2, 4).toUpperCase();
 const earthToken = "E" + Math.random().toString(36).substr(2, 4).toUpperCase();
@@ -19,7 +19,7 @@ export default {
     return earthToken;
   },
   startSatelite: () => {
-    sateliteOn = true;
+    satelliteOn = true;
   },
   stopClientPC: () => {
     clientOn = false;
@@ -31,7 +31,7 @@ export default {
     earthOn = false;
   },
   stopSatelite: () => {
-    sateliteOn = false;
+    satelliteOn = false;
   },
 
   sendMessage(msg: string, to: string, token: string) {
@@ -46,7 +46,7 @@ export default {
       if (!marsOn) {
         throw new Error("Broken: Mars Server is offline!");
       }
-      if (!sateliteOn) {
+      if (!satelliteOn) {
         return "Service is unavailable";
       }
       if (token !== marsToken) {
@@ -58,6 +58,12 @@ export default {
     if (to === "Earth") {
       if (!clientOn) {
         throw new Error("Broken: Client is offline!");
+      }
+      if (!earthOn) {
+        throw new Error("Broken: Earth Server is offline!");
+      }
+      if (!satelliteOn) {
+        return "Service is unavailable";
       }
       if (token !== earthToken) {
         return "Security Error";

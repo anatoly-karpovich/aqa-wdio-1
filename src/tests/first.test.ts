@@ -1,21 +1,22 @@
-describe("Login page tests", () => {
-    //TODO: ВЫНЕСЛИ В КОНСТАНТЫ НА УРОВЕНЬ ДЕСКРАЙБА ВСЕ БОЛЕЕ ОДНОГО РАЗА ИСПОЛЬЗУЕМЫЕ СЕЛЕКТОРЫ!
+import {find} from "../utils/helpers";
+import {URLS} from "../endpoints";
+import {userCredentials} from "../data/first_test_constant";
 
-    const url = "http://the-internet.herokuapp.com/";
-    const validUsername = "tomsmith";
-    const validPassword = "SuperSecretPassword!";
+describe("Login page tests", () => {
+
     const errorMessageSelector = "div#flash";
-    const succesAlert = "div#flash.success";
+    const successAlert = "div#flash.success";
     const loginButton = `button[type="submit"]`;
     const logoutButton = `div.example > a.button.secondary.radius`;
     const loginPageTitle = `//h2[text()="Login Page"]`;
     const securePageTitle = `//h2[text()[normalize-space()='Secure Area']]`;
+
     before(async () => {
         await browser.maximizeWindow();
     });
 
     beforeEach(async () => {
-        await browser.url(url);
+        await browser.url(URLS.baseHerokuapp);
     });
     context("Positive scenarions", () => {
         it("Should login with valid data", async () => {
@@ -38,10 +39,10 @@ describe("Login page tests", () => {
                 timeoutMsg: `Login page not opened after 5 seconds`,
                 reverse: false
             });
-            await $("#username").setValue(validUsername);
-            await $(`//input[@id="password"]`).setValue(validPassword);
+            await $("#username").setValue(userCredentials.validUsername);
+            await $(`//input[@id="password"]`).setValue(userCredentials.validPassword);
             $(`button.radius`).click();
-            const currentUrlOfSecretPage = (await browser.getUrl()).split(url)[1];
+            const currentUrlOfSecretPage = (await browser.getUrl()).split(URLS.baseHerokuapp)[1];
             expect(currentUrlOfSecretPage).toBe("login");
 
             const title = await $(`//h2[text()[normalize-space()='Secure Area']]`).getText();
@@ -51,7 +52,6 @@ describe("Login page tests", () => {
 
     context("Negative Scenarions", () => {
         it("Should NOT login with invalid username", async () => {
-            const invalidUsername = validUsername + "23";
             await $(`h1.heading`).waitForDisplayed({
                 timeout: 5000,
                 timeoutMsg: `Home page not opened after 5 seconds`,
@@ -63,10 +63,10 @@ describe("Login page tests", () => {
                 timeoutMsg: `Login page not opened after 5 seconds`,
                 reverse: false
             });
-            await $("#username").setValue(invalidUsername);
-            await $(`//input[@id="password"]`).setValue(validPassword);
+            await $("#username").setValue(userCredentials.invalidUsername);
+            await $(`//input[@id="password"]`).setValue(userCredentials.validPassword);
             $(`button.radius`).click();
-            const currentUrlOfSecretPage = (await browser.getUrl()).split(url)[1];
+            const currentUrlOfSecretPage = (await browser.getUrl()).split(URLS.baseHerokuapp)[1];
             expect(currentUrlOfSecretPage).toBe("login");
 
             const title = await $("h2").getText();
@@ -77,7 +77,6 @@ describe("Login page tests", () => {
         });
 
         it("Should NOT login with invalid password", async () => {
-            const invalidPassword = validPassword + "23";
             await $(`h1.heading`).waitForDisplayed({
                 timeout: 5000,
                 timeoutMsg: `Home page not opened after 5 seconds`,
@@ -89,10 +88,10 @@ describe("Login page tests", () => {
                 timeoutMsg: `Login page not opened after 5 seconds`,
                 reverse: false
             });
-            await $("#username").setValue(validUsername);
-            await $(`//input[@id="password"]`).setValue(invalidPassword);
+            await $("#username").setValue(userCredentials.validUsername);
+            await $(`//input[@id="password"]`).setValue(userCredentials.invalidPassword);
             $(`button.radius`).click();
-            const currentUrlOfSecretPage = (await browser.getUrl()).split(url)[1];
+            const currentUrlOfSecretPage = (await browser.getUrl()).split(URLS.baseHerokuapp)[1];
             expect(currentUrlOfSecretPage).toBe("login");
 
             const title = await $("h2").getText();
@@ -103,7 +102,6 @@ describe("Login page tests", () => {
         });
     });
 
-    //TODO: Сделать из этого теста ПОЛНОЦЕННЫЙ e2e тест, ищущий ссылку из массива по тексту
     /*
     - поиск линки по тексту
     - клик
@@ -112,15 +110,17 @@ describe("Login page tests", () => {
     - логаут
     - проверка страницы куда вернулись
     */
-    it.only("e2e test", async () => {
-        let linkToAuthorizationPage
+    it("e2e test", async () => {
+        // let linkToAuthorizationPage
         const links = await $$("ul a");
-        for (const link of links) {
-            if (await link.getText() === "Form Authentication") {
-                linkToAuthorizationPage = link;
-                break;
-            }
-        }
+        // for (const link of links) {
+        //     if (await link.getText() === "Form Authentication") {
+        //         linkToAuthorizationPage = link;
+        //         break;
+        //     }
+        // }
+        const linkToAuthorizationPage = await find(links, async (el: WebdriverIO.Element) => (await el.getText()) === "Form Authentication");
+
         await linkToAuthorizationPage?.click();
 
         await $(loginPageTitle).waitForDisplayed({
@@ -128,16 +128,16 @@ describe("Login page tests", () => {
             timeoutMsg: `Login page not opened after 5 seconds`,
             reverse: false
         });
-        await $("#username").setValue(validUsername);
-        await $(`//input[@id="password"]`).setValue(validPassword);
+        await $("#username").setValue(userCredentials.validUsername);
+        await $(`//input[@id="password"]`).setValue(userCredentials.validPassword);
         await $(loginButton).click();
-        await $(succesAlert).waitForDisplayed({
+        await $(successAlert).waitForDisplayed({
             timeout: 5000,
             timeoutMsg: `Success alert not displayed after 5 seconds`,
             reverse: false
         });
 
-        const currentUrlOfSecurePage = (await browser.getUrl()).split(url)[1];
+        const currentUrlOfSecurePage = (await browser.getUrl()).split(URLS.baseHerokuapp)[1];
         expect(currentUrlOfSecurePage).toBe("secure");
 
         const titleOfSecurePage = await $(securePageTitle).getText();
@@ -145,7 +145,7 @@ describe("Login page tests", () => {
 
         await $(logoutButton).click();
 
-        const currentUrlOfLoginPage = (await browser.getUrl()).split(url)[1];
+        const currentUrlOfLoginPage = (await browser.getUrl()).split(URLS.baseHerokuapp)[1];
         expect(currentUrlOfLoginPage).toBe("login");
 
         await $(loginPageTitle).waitForDisplayed({

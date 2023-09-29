@@ -32,7 +32,7 @@ export const config: Options.Testrunner = {
   //
   specs: [
     // ToDo: define location for spec files here
-    `${process.cwd()}/src/**/iframe.test.ts`,
+    `${process.cwd()}/src/**/products/smoke.test.ts`,
   ],
   // Patterns to exclude.
   exclude: [

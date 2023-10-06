@@ -1,4 +1,4 @@
-import { IProduct } from "../../types/product.types.js";
+import { IProduct } from "../../pages/types/product.types.js";
 import { BaseSteps } from "../baseSteps.js";
 import AddNewProductPage from "../../pages/products/addNewProduct.page.js";
 

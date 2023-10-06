@@ -1,4 +1,4 @@
-import { findElement } from "../utils/elements/findElement.js";
+import { findElement } from "../../utils/elements/findElement.js";
 
 const TIMEOUT_5_SECS = 5000;
 

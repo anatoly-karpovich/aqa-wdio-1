@@ -1,4 +1,4 @@
-import { IUserCredentials } from "../types/user.types.js";
+import { IUserCredentials } from "../pages/types/user.types.js";
 import SignInPage from "../pages/signInPage.page.js";
 import { BaseSteps } from "./baseSteps.js";
 

@@ -3,4 +3,5 @@ export interface IProduct {
   price: number;
   amount: number;
   notes?: string;
+  manufacturer: string;
 }

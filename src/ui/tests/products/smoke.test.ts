@@ -1,14 +1,15 @@
 import { faker } from "@faker-js/faker";
-import SignInPage from "../../pages/signInPage.page.js";
-import HomePage from "../../pages/homePage.page.js";
-import ProductsListPage from "../../pages/products/productsList.page.js";
-import AddNewProductPage from "../../pages/products/addNewProduct.page.js";
 import SignInSteps from "../../steps/signInSteps.steps.js";
 import HomeSteps from "../../steps/homeSteps.steps.js";
 import ProductsListSteps from "../../steps/products/productsList.steps.js";
 import AddNewProductSteps from "../../steps/products/addNewProduct.steps.js";
+import SignInApiSteps from "../../../api/steps/signIn/signIn.steps.js";
+import ProductsService from "../../../services/product.service.js";
+import { IProduct } from "../../pages/types/product.types.js";
 
 describe("Products smoke tests", () => {
+  let token: string;
+  let id: string;
   const productToCreate = {
     name: faker.commerce.product() + faker.number.int({ min: 1, max: 100 }),
     price: 100,
@@ -87,7 +88,7 @@ describe("Products smoke tests", () => {
     // expect(actualManufacturer).toBe(productToCreate.manufacturer);
   });
 
-  it("Should create product with valid data v3", async () => {
+  it.skip("Should create product with valid data v3", async () => {
     //login
     await SignInSteps.signIn();
 
@@ -108,5 +109,25 @@ describe("Products smoke tests", () => {
     // expect(actualName).toBe(productToCreate.name);
     // expect(actualPrice).toBe(`$${productToCreate.price}`);
     // expect(actualManufacturer).toBe(productToCreate.manufacturer);
+  });
+
+  it("Should edit created product", async () => {
+    const product = {
+      name: faker.commerce.product() + faker.number.int({ min: 1, max: 100 }),
+      price: 100,
+      amount: 2,
+      manufacturer: "Apple",
+      notes: "Test product",
+    };
+    token = await SignInApiSteps.signInAsAdminAndGetToken();
+    const response = await ProductsService.create({ data: product as IProduct, token });
+    const productName = response.data.Product.name;
+    id = response.data.Product._id;
+    await SignInSteps.signIn();
+    await HomeSteps.openProductsPage();
+  });
+
+  afterEach(async () => {
+    await ProductsService.delete({ token, data: { _id: id } });
   });
 });

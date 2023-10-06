@@ -19,6 +19,7 @@
         "noUnusedLocals": true,
         "noFallthroughCasesInSwitch": true,
         "esModuleInterop": true,
+        "noImplicitAny": false
     },
     "include": [
         "src", "wdio.conf.ts"

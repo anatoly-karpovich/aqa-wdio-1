@@ -1,4 +1,6 @@
 import type { Options } from "@wdio/types";
+import * as rimraf from "rimraf";
+
 export const config: Options.Testrunner = {
   //
   // ====================
@@ -32,9 +34,14 @@ export const config: Options.Testrunner = {
   //
   specs: [
     // ToDo: define location for spec files here
-    `${process.cwd()}/src/**/products/smoke.test.ts`,
+    `./src/**/*.test.js`,
   ],
+  suites: {
+    ui: ["./src/ui/test/**/*.test.js"],
+    api: ["./src/api/test/**/*.test.js"],
+  },
   // Patterns to exclude.
+
   exclude: [
     // 'path/to/excluded/files'
   ],
@@ -135,7 +142,18 @@ export const config: Options.Testrunner = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: https://webdriver.io/docs/dot-reporter
-  reporters: ["spec", ["allure", { outputDir: "allure-results" }]],
+  reporters: [
+    "spec",
+    [
+      "allure",
+      {
+        outputDir: "allure-results",
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
+        disableMochaHooks: true,
+      },
+    ],
+  ],
 
   //
   // Options to be passed to Mocha.
@@ -157,8 +175,9 @@ export const config: Options.Testrunner = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  // onPrepare: function (config, capabilities) {
-  // },
+  onPrepare: function (config, capabilities) {
+    rimraf.sync("./allure-results");
+  },
   /**
    * Gets executed before a worker process is spawned and can be used to initialise specific service
    * for that worker as well as modify runtime environments in an async fashion.
@@ -196,8 +215,9 @@ export const config: Options.Testrunner = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  // before: function (capabilities, specs) {
-  // },
+  before: async function (capabilities, specs) {
+    await browser.maximizeWindow();
+  },
   /**
    * Runs before a WebdriverIO command gets executed.
    * @param {string} commandName hook command name

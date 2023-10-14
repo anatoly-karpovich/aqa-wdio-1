@@ -1,14 +1,14 @@
 import { apiConfig } from "../config/apiConfig.js";
-import { IProduct } from "../ui/pages/types/product.types.js";
+import { IProduct } from "../types/products/product.types.js";
 import requestApi from "../utils/request/request.js";
-import { Id, RequestOptions, RequestParams } from "../utils/request/requestTypes.js";
+import type { Id, RequestOptions, RequestParams } from "../types/request/requestTypes.js";
 
 class ProductsService {
   async get(params: RequestParams<Id>) {
     const options: RequestOptions = {
       method: "get",
       baseURL: apiConfig.baseURL,
-      url: params.data ? apiConfig.endpoints["Get Product By Id"](params.data._id) : apiConfig.endpoints.Products,
+      url: params.data ? apiConfig.endpoints["Product By Id"](params.data._id) : apiConfig.endpoints.Products,
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${params.token}` },
     };
     return requestApi.sendRequest(options);

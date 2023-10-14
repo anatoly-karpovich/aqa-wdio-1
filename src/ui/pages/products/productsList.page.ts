@@ -6,19 +6,39 @@ class ProductsListPage extends BasePage {
   }
 
   get ["Table row selector"]() {
-    return (product: string) => `//tr[./td[text()="${product}"]]`;
+    return (productName: string) => `//tr[./td[text()="${productName}"]]`;
   }
 
-  get ["Name by table row"]() {
-    return (product: string) => `${this["Table row selector"](product)}/td[1]`;
+  get ["Name by product name"]() {
+    return (productName: string) => `${this["Table row selector"](productName)}/td[1]`;
   }
 
-  get ["Price by table row"]() {
-    return (product: string) => `${this["Table row selector"](product)}/td[2]`;
+  get ["Price by product name"]() {
+    return (productName: string) => `${this["Table row selector"](productName)}/td[2]`;
   }
 
-  get ["Manufacturer by table row"]() {
-    return (product: string) => `${this["Table row selector"](product)}/td[3]`;
+  get ["Manufacturer by product name"]() {
+    return (productName: string) => `${this["Table row selector"](productName)}/td[3]`;
+  }
+
+  get ["Created by product name"]() {
+    return (productName: string) => `${this["Table row selector"](productName)}/td[4]`;
+  }
+
+  get ["Actions by product name"]() {
+    return (productName: string) => `${this["Table row selector"](productName)}/td[5]`;
+  }
+
+  get ["Details button by product name"]() {
+    return (productName: string) => `${this["Actions by product name"](productName)}/button[@title="Details"]`;
+  }
+
+  get ["Edit button by product name"]() {
+    return (productName: string) => `${this["Actions by product name"](productName)}/button[@title="Edit"]`;
+  }
+
+  get ["Delete button by product name"]() {
+    return (productName: string) => `${this["Actions by product name"](productName)}/button[@title="Delete"]`;
   }
 }
 

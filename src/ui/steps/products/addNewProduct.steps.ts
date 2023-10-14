@@ -1,4 +1,4 @@
-import { IProduct } from "../../pages/types/product.types.js";
+import { IProduct } from "../../../types/products/product.types.js";
 import { BaseSteps } from "../baseSteps.js";
 import AddNewProductPage from "../../pages/products/addNewProduct.page.js";
 
@@ -7,8 +7,8 @@ class AddNewProductSteps extends BaseSteps {
     // (await AddNewProductPage["Name input"]).setValue(product.name);
     await AddNewProductPage.setValue(AddNewProductPage["Name input"], product.name);
     //Manufacturer my yourself
-    await AddNewProductPage.setValue(AddNewProductPage["Price input"], product.price);
-    await AddNewProductPage.setValue(AddNewProductPage["Amount input"], product.amount);
+    await AddNewProductPage.setValue(AddNewProductPage["Price input"], `${product.price}`);
+    await AddNewProductPage.setValue(AddNewProductPage["Amount input"], `${product.amount}`);
 
     if (product.notes) {
       await AddNewProductPage.setValue(AddNewProductPage["Notes input"], product.notes);

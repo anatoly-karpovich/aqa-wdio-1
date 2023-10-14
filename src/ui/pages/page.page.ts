@@ -1,4 +1,5 @@
 import { findElement } from "../../utils/elements/findElement.js";
+import Logger from "../../utils/logger/logger.js";
 
 const TIMEOUT_5_SECS = 5000;
 
@@ -9,13 +10,78 @@ export class Page {
     return element;
   }
 
-  async setValue(selector: string, value: string | number, timeout = TIMEOUT_5_SECS) {
-    const element = await this.waitForElement(selector, timeout);
-    await element.setValue(value);
+  async waitForElementAndScroll(selector: string, timeout = TIMEOUT_5_SECS) {
+    try {
+      const element = await this.waitForElement(selector, timeout);
+      await element.waitForExist({ timeout });
+      await element.scrollIntoView({ block: "center" });
+      Logger.log(`Successfully scrolled to element with selector ${selector}`);
+      return element;
+    } catch (error) {
+      Logger.log(`Failed to scroll to element with selector ${selector}`, "error");
+      throw error;
+    }
   }
 
-  async click(selector: string, timeout = TIMEOUT_5_SECS) {
-    const element = await this.waitForElement(selector, timeout);
-    await element.click();
+  async click(selector: string, timeout?: number) {
+    try {
+      const element = await this.waitForElementAndScroll(selector, timeout);
+      if (element) {
+        await element.click();
+        Logger.log(`Successfully clicked on element with selector ${selector}`);
+      }
+    } catch (error) {
+      Logger.log(`Failed to click on element with selector ${selector}`, "error");
+      throw error;
+    }
+  }
+
+  async setValue(selector: string, text: string, timeout?: number) {
+    try {
+      const element = await this.waitForElementAndScroll(selector, timeout);
+      if (element) {
+        await element.setValue(text);
+        Logger.log(`Successfully set "${text}" into element with selector ${selector}`);
+      }
+    } catch (error) {
+      Logger.log(`Failed to set "${text}" into element with selector ${selector}`, "error");
+      throw error;
+    }
+  }
+
+  async addValue(selector: string, text: string, timeout?: number) {
+    try {
+      const element = await this.waitForElementAndScroll(selector, timeout);
+      if (element) {
+        await element.addValue(text);
+        Logger.log(`Successfully added "${text}" into element with selector ${selector}`);
+      }
+    } catch (error) {
+      Logger.log(`Failed to add "${text}" into element with selector ${selector}`, "error");
+      throw error;
+    }
+  }
+
+  async clear(selector: string, timeout?: number) {
+    try {
+      const element = await this.waitForElementAndScroll(selector, timeout);
+      if (element) {
+        await element.clearValue();
+        Logger.log(`Successfully cleared value from element with selector ${selector}`);
+      }
+    } catch (error) {
+      Logger.log(`Failed to clear value from element with selector ${selector}`, "error");
+      throw error;
+    }
+  }
+
+  async openPage(url: string) {
+    try {
+      await browser.url(url);
+      Logger.log(`Successfully opened url: ${url}`);
+    } catch (error) {
+      Logger.log(`Failed to opened url: ${url}`, "error");
+      throw error;
+    }
   }
 }

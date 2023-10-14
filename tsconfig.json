@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "outDir": "./dist",
         "moduleResolution": "node",
         "module": "ESNext",
         "target": "es2022",
@@ -7,19 +8,19 @@
             "node",
             "@wdio/globals/types",
             "expect-webdriverio",
-            "@wdio/mocha-framework",
-            "webdriverio"
+            "@wdio/mocha-framework"
         ],
         "skipLibCheck": true,
-        "noEmit": true,
-        "allowImportingTsExtensions": true,
+        "noEmit": false,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "strict": true,
         "noUnusedLocals": true,
+        "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true,
-        "esModuleInterop": true,
-        "noImplicitAny": false
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
     },
     "include": [
         "src", "wdio.conf.ts"

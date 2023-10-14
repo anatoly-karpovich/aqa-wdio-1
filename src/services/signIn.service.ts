@@ -1,5 +1,5 @@
 import { apiConfig } from "../config/apiConfig.js";
-import { ICredentials, RequestOptions, RequestParams } from "../utils/request/requestTypes.js";
+import { ICredentials, RequestOptions, RequestParams } from "../types/request/requestTypes.js";
 import requestApi from "../utils/request/request.js";
 
 class SignInService {

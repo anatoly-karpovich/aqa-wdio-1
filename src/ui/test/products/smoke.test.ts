@@ -7,7 +7,6 @@ import ProductsSteps from "../../steps/products/products.steps.js";
 import { Products } from "../../../utils/entities/index.js";
 import { requestAsLoggedInUser } from "../../../utils/request/requestAsLoggedInUser.js";
 import allure from "@wdio/allure-reporter";
-import Logger from "../../../utils/logger/logger.js";
 
 describe("Products smoke tests", () => {
   allure.addFeature("Products");
@@ -19,17 +18,11 @@ describe("Products smoke tests", () => {
   it("Should edit created product", async () => {
     allure.addStory("Product Details");
     allure.addSeverity("Blocker");
-    try {
-      await SignInSteps.signIn();
-      await ProductsSteps.createProductViaApi();
-      await HomeSteps.openProductsPage();
-      await ProductsListSteps.openDetailsModalForCreatedProduct(Products.getProduct().name);
-      await browser.pause(1000);
-    } catch (e) {
-      throw e;
-    } finally {
-      Logger.sendLogsToReport();
-    }
+    await SignInSteps.signIn();
+    await ProductsSteps.createProductViaApi();
+    await HomeSteps.openProductsPage();
+    await ProductsListSteps.openDetailsModalForCreatedProduct(Products.getProduct().name);
+    await browser.pause(1000);
   });
 
   afterEach(async () => {

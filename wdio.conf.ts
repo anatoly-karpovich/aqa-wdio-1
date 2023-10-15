@@ -1,5 +1,7 @@
 import type { Options } from "@wdio/types";
 import * as rimraf from "rimraf";
+import { attachScreenshotToReport } from "./src/utils/reporter/reporter.js";
+import Logger from "./src/utils/logger/logger.js";
 
 export const config: Options.Testrunner = {
   //
@@ -259,8 +261,10 @@ export const config: Options.Testrunner = {
    * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
    */
   afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+    Logger.sendLogsToReport();
     if (!passed) {
-      await browser.takeScreenshot();
+      const screenshot = await browser.takeScreenshot();
+      attachScreenshotToReport(screenshot);
     }
   },
 

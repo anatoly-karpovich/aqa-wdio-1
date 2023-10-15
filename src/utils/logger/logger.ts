@@ -34,7 +34,7 @@ class Logger {
     this.log(`API Request: ${requestInfo}`);
   }
 
-  logApiResponse(responseInfo: string) {
+  logApiResponse(responseInfo: string, level: logLevels = "info") {
     this.log(`API Response: ${responseInfo}`);
   }
 

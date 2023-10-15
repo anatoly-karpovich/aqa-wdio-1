@@ -1,4 +1,5 @@
 import { logStep } from "../../utils/reporter/reporter.js";
+import SignInPage from "../pages/signInPage.page.js";
 
 class CommonSteps {
   async getAuthorizationToken() {
@@ -8,9 +9,7 @@ class CommonSteps {
 
   @logStep("Open Sales Portal")
   async openSalesPortal() {
-    await browser.url("https://anatoly-karpovich.github.io/aqa-course-project/#");
-    const currentUrl = await browser.getUrl();
-    expect(currentUrl).toBe("https://anatoly-karpovich.github.io/aqa-course-project/#");
+    await SignInPage.openPage("https://anatoly-karpovich.github.io/aqa-course-project/#");
   }
 }
 

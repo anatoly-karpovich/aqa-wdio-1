@@ -1,5 +1,6 @@
 import { findElement } from "../../utils/elements/findElement.js";
 import Logger from "../../utils/logger/logger.js";
+import { logStep } from "../../utils/reporter/reporter.js";
 
 const TIMEOUT_5_SECS = 5000;
 
@@ -23,6 +24,7 @@ export class Page {
     }
   }
 
+  @logStep("Click on element with selector ${selector}")
   async click(selector: string, timeout?: number) {
     try {
       const element = await this.waitForElementAndScroll(selector, timeout);
@@ -36,6 +38,7 @@ export class Page {
     }
   }
 
+  @logStep("Set {text} into element with selector {selector}")
   async setValue(selector: string, text: string, timeout?: number) {
     try {
       const element = await this.waitForElementAndScroll(selector, timeout);
@@ -49,6 +52,7 @@ export class Page {
     }
   }
 
+  @logStep("Add {text} into element with selector {selector}")
   async addValue(selector: string, text: string, timeout?: number) {
     try {
       const element = await this.waitForElementAndScroll(selector, timeout);
@@ -62,6 +66,7 @@ export class Page {
     }
   }
 
+  @logStep("Clear value from element with selector {selector}")
   async clear(selector: string, timeout?: number) {
     try {
       const element = await this.waitForElementAndScroll(selector, timeout);
@@ -75,6 +80,7 @@ export class Page {
     }
   }
 
+  @logStep("Open URL {selector}")
   async openPage(url: string) {
     try {
       await browser.url(url);
